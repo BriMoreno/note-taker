@@ -41,7 +41,24 @@ class saveNote {
         
         //validation
         if (!title || !text) {
-            
+            alert ("Please put in values for the title and note.");
         }
+        //making the id attached to the note
+        const theNote = { title, text, id: uuidv4() };
+
+        //adding and updating
+        return this.fetchNotes()
+            .then(notes => [...notes, theNote])
+            .then(newNotes => this.write(newNotes))
+            .then(() => theNote);
     }
+    //to delete notes by id
+    subtracting(id) {
+        return this.fetchNotes()
+            .then(notes => notes.filter(note => note.id !== id))
+            .then(filterId => this.write(filterId));
+    }
+
 }
+
+module.exports = new saveNote();
