@@ -11,5 +11,5 @@ app.use('/api', api);
 app.use('/', html);
 
 app.listen(port, () => {
-    console.log('Server open')
+    console.log('View in http://localhost:3001')
 });
