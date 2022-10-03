@@ -10,7 +10,7 @@ let activeNote = {};
 //gets the notes from the db
 const getNotes = () => {
   return $.ajax({
-    url:"/api/notes",
+    url:"/notes",
     method: "GET",
    });
 };
@@ -18,7 +18,7 @@ const getNotes = () => {
 //to save notes
 const saveNote = (note) => {
   return $.ajax({
-    url: "/api/notes",
+    url: "/notes",
     data: note,
     method: "POST",
   });
@@ -27,7 +27,7 @@ const saveNote = (note) => {
 //for deleting notes
 const deleteNote = (id) => {
   return $.ajax({
-    url: "api/notes/" + id,
+    url: "/notes/" + id,
     method: "DELETE",
   });
 };
@@ -100,7 +100,7 @@ const handleRenderSaveBtn = function () {
 };
 
 // Render the list of note titles
-const renderNoteList = (notes) => {
+const renderNoteList = function(notes) {
   $noteList.empty();
 
   const noteListItems = [];
@@ -123,7 +123,7 @@ const renderNoteList = (notes) => {
     noteListItems.push(create$li('No saved Notes', false));
   }
 
-  notes.forEach((note) => {
+  notes.forEach(function (note) {
     const $li = create$li(note.title).data(note);
     noteListItems.push($li);
   });

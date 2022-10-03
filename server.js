@@ -1,15 +1,17 @@
 const express = require("express");
-const api = require('./routes/notes.js');
-const html = require('./routes/html.js');
 const port = process.env.PORT || 3001;
 const app = express();
 
-app.use(express.json());
+//for data parsing
 app.use(express.urlencoded({ extended: true}));
-app.use(express.static('public'));
-app.use('/api', api);
-app.use('/', html);
+app.use(express.json());
+app.use(express.static("public"));
 
-app.listen(port, () => {
+//routes
+require('./routes/html')(app);
+require('./routes/notes')(app);
+
+//prints in terminal
+app.listen(port, function() {
     console.log('View in http://localhost:3001')
 });
