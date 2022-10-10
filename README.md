@@ -29,11 +29,15 @@ THEN I am presented with empty fields to enter a new note title and the note’s
 
 ## How the site should look like
 
-![My gif](generator.gif)
+![My gif](public/assets/gif/noteTaker.gif)
 
 ## Help
 
 Any advice for improvement on the design or user experience would be appreciated
+
+## Work Cited
+[GitIgnore Template](https://github.com/github/gitignore)
+[Routing with JQuery](https://www.pakainfo.com/jquery-routing-using-single-page-application-without-framework/)
 
 ## Authors
 [BriMoreno](https://github.com/BriMoreno)
