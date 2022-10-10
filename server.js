@@ -1,17 +1,16 @@
 const express = require("express");
-const port = process.env.PORT || 3001;
 const app = express();
+const PORT = process.env.PORT || 3001;
 
-//for data parsing
-app.use(express.urlencoded({ extended: true}));
+// Sets up the Express app to handle data parsing
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-//routes
-require('./routes/html')(app);
-require('./routes/notes')(app);
+// ROUTES
+require('./routes/apiRoutes')(app);
+require('./routes/htmlRoutes')(app);
 
-//prints in terminal
-app.listen(port, function() {
-    console.log('View in http://localhost:3001')
+app.listen(PORT, function() {
+    console.log(`App listening on PORT: ${PORT}, http://localhost:${PORT}`);
 });

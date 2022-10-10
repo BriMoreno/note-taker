@@ -1,5 +1,5 @@
-html,
-body {
+/* changed some of the css to make it adjustable with routes so that the certain buttons will appear on when conditions are met*/
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -17,7 +17,7 @@ body {
 }
 
 .note-textarea,
-.note-title {
+ .note-title {
   color: #000000;
   width: 100%;
   outline: none;
@@ -36,7 +36,7 @@ body {
   font-size: 3rem;
 }
 
-.note-title:read-only,
+.note-title:read-only, 
 .note-textarea:read-only {
   color: #757575;
 }
@@ -65,7 +65,7 @@ body {
   width: 75%;
 }
 
-.list-container i {
+.list-container, i {
   font-size: 1.1rem;
   cursor: pointer;
 }

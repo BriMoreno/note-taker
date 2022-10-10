@@ -1,23 +1,16 @@
 {
   "name": "note-taker",
   "version": "1.0.0",
-  "description": "used to write and save notes",
-  "main": "index.js",
+  "description": "a app for note taking",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/BriMoreno/note-taker.git"
-  },
-  "author": "",
+  "author": "Britania Moreno",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/BriMoreno/note-taker/issues"
-  },
-  "homepage": "https://github.com/BriMoreno/note-taker#readme",
   "dependencies": {
-    "express": "^4.16.1",
+    "express": "^4.16.4",
     "uuid": "^8.3.0"
   }
 }

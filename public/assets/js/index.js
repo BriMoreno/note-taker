@@ -1,46 +1,47 @@
+// making variables based off of html classes
 const $noteTitle = $(".note-title");
 const $noteText = $(".note-textarea");
-const $saveNoteBtn = $(".save-note");
-const $newNoteBtn = $(".new-note");
+const $saveBtn = $(".save-note");
+const $addBtn = $(".new-note");
 const $noteList = $(".list-container .list-group");
 
-// activeNote is used to keep track of the note in the textarea
-let activeNote = {};
+// to track of the notes being input in a array
+let inputNote = [];
 
-// A function for getting all notes from the db
-const getNotes = () => {
+// to return all the notes from the db
+const returnAll = () => {
   return $.ajax({
-    url: "/notes",
+    url: "/api/notes",
     method: "GET",
   });
 };
 
-// A function for saving a note to the db
+// to save the notes to db
 const saveNote = (note) => {
   return $.ajax({
-    url: "/notes",
+    url: "/api/notes",
     data: note,
     method: "POST",
   });
 };
 
-// A function for deleting a note from the db
+// delete notes via id
 const deleteNote = (id) => {
   return $.ajax({
-    url: "/notes/" + id,
+    url: "api/notes/" + id,
     method: "DELETE",
   });
 };
 
-// If there is an activeNote, display it, otherwise render empty inputs
-const renderActiveNote = () => {
-  $saveNoteBtn.hide();
+// to display note being written and make it so if the title and text are empty then user is unable to save the note
+const renderNote = () => {
+  $saveBtn.hide();
 
-  if (activeNote.id) {
+  if (inputNote.id) {
     $noteTitle.attr("readonly", true);
     $noteText.attr("readonly", true);
-    $noteTitle.val(activeNote.title);
-    $noteText.val(activeNote.text);
+    $noteTitle.val(inputNote.title);
+    $noteText.val(inputNote.text);
   } else {
     $noteTitle.attr("readonly", false);
     $noteText.attr("readonly", false);
@@ -49,7 +50,7 @@ const renderActiveNote = () => {
   }
 };
 
-// Get the note data from the inputs, save it to the db and update the view
+// saves input and updates db by spliting the title and text into columns in the table of the db
 const handleNoteSave = function () {
   const newNote = {
     title: $noteTitle.val(),
@@ -57,64 +58,60 @@ const handleNoteSave = function () {
   };
 
   saveNote(newNote).then(() => {
-    getAndRenderNotes();
-    renderActiveNote();
+    renderAllNotes();
+    renderNote();
   });
 };
 
-// Delete the clicked note
+// Deletes note when button is clicked
 const handleNoteDelete = function (event) {
-  // prevents the click listener for the list from being called when the button inside of it is clicked
+  // prevents the event click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
 
   const note = $(this).parent(".list-group-item").data();
 
-  if (activeNote.id === note.id) {
-    activeNote = {};
+  if (inputNote.id === note.id) {
+    inputNote = {};
   }
-
+  // once deleted it will call two function to rerun so that it no longer shows on screen
   deleteNote(note.id).then(() => {
-    getAndRenderNotes();
-    renderActiveNote();
+    renderAllNotes();
+    renderNote();
   });
 };
 
-// Sets the activeNote and displays it
-const handleNoteView = function () {
-  activeNote = $(this).data();
-  renderActiveNote();
+const displayNote = function () {
+  inputNote = $(this).data();
+  renderNote();
 };
 
-// Sets the activeNote to and empty object and allows the user to enter a new note
-const handleNewNoteView = function () {
-  activeNote = {};
-  renderActiveNote();
+const displayNewNote = function () {
+  inputNote = {};
+  renderNote();
 };
 
-// If a note's title or text are empty, hide the save button
-// Or else show it
-const handleRenderSaveBtn = function () {
+// cannot save a note if the title or text area is empty
+const renderSave = function () {
   if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
-    $saveNoteBtn.hide();
+    $saveBtn.hide();
   } else {
-    $saveNoteBtn.show();
+    $saveBtn.show();
   }
 };
 
-// Render's the list of note titles
+// Render's the note titles on the side
 const renderNoteList = (notes) => {
   $noteList.empty();
 
   const noteListItems = [];
 
-  // Returns jquery object for li with given text and delete button
-  // unless withDeleteButton argument is provided as false
-  const create$li = (text, withDeleteButton = true) => {
+  // to display the list with the delete button
+  const create$li = (text, dltBtn = true) => {
     const $li = $("<li class='list-group-item'>");
     const $span = $("<span>").text(text);
     $li.append($span);
 
-    if (withDeleteButton) {
+    if (dltBtn) {
       const $delBtn = $(
         "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
       );
@@ -122,30 +119,28 @@ const renderNoteList = (notes) => {
     }
     return $li;
   };
-
+  //no saved notes means no delete button
   if (notes.length === 0) {
     noteListItems.push(create$li("No saved Notes", false));
   }
-
   notes.forEach((note) => {
     const $li = create$li(note.title).data(note);
     noteListItems.push($li);
   });
-
   $noteList.append(noteListItems);
 };
 
-// Gets notes from the db and renders them to the sidebar
-const getAndRenderNotes = () => {
-  return getNotes().then(renderNoteList);
+// to render to the side bar
+const renderAllNotes = () => {
+  return returnAll().then(renderNoteList);
 };
 
-$saveNoteBtn.on("click", handleNoteSave);
-$noteList.on("click", ".list-group-item", handleNoteView);
-$newNoteBtn.on("click", handleNewNoteView);
+//click events will trigger the functions to happen
+$saveBtn.on("click", handleNoteSave);
+$noteList.on("click", ".list-group-item", displayNote);
+$addBtn.on("click", displayNewNote);
 $noteList.on("click", ".delete-note", handleNoteDelete);
-$noteTitle.on("keyup", handleRenderSaveBtn);
-$noteText.on("keyup", handleRenderSaveBtn);
+$noteTitle.on("keyup", renderSave);
+$noteText.on("keyup", renderSave);
 
-// Gets and renders the initial list of notes
-getAndRenderNotes();
+renderAllNotes();
